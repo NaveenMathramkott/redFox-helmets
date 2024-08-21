@@ -11,6 +11,7 @@
 body {
   margin: 0;
   padding: 0;
+  /* overflow: hidden; */
   box-sizing: border-box;
 }
 
@@ -18,3 +19,153 @@ body {
   width: 100vw;
   height: 100vh;
 }
+
+/* confirator style starts */
+
+.configurator {
+  position: fixed;
+  top: 50%;
+  transform: translateY(-50%);
+  right: 2rem;
+  background: rgb(51, 51, 51, 0.8);
+  border-radius: 20px;
+  padding: 30px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5);
+  width: 250px;
+  /* filter: sepia(60%) contrast(90%) brightness(90%); */
+}
+
+.title {
+  text-align: center;
+  font-size: 18px;
+  margin-bottom: 16px;
+  color: #00c6ff;
+}
+
+.config-section {
+  margin-bottom: 20px;
+}
+
+.label {
+  font-size: 14px;
+  color: #ccc;
+  display: block;
+  padding: 10px;
+}
+
+.dropdown {
+  width: 100%;
+  padding: 10px;
+  background-color: #222;
+  color: #00c6ff;
+  border: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.color-selection {
+  display: flex;
+  justify-content: space-between;
+}
+
+.color-option {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.color-option:hover {
+  transform: scale(1.1);
+}
+
+.color-red {
+  background-color: #ff4e4e;
+}
+.color-blue {
+  background-color: #4e6aff;
+}
+.color-green {
+  background-color: #4eff4e;
+}
+
+.btn-section {
+  display: flex;
+  justify-content: center;
+  column-gap: 10px;
+}
+
+.btn-configure,
+.btn-reset {
+  width: 46%;
+  padding: 10px;
+  background-color: #00c6ff;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+  margin: 5px 0;
+}
+
+.btn-configure:hover,
+.btn-reset:hover {
+  background-color: #008fbf;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: #333;
+  padding: 20px;
+  border-radius: 15px;
+  text-align: center;
+  color: #ffffff;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  width: 300px;
+}
+
+.close-button {
+  color: #ffffff;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.btn-close-modal {
+  background-color: #00c6ff;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 20px;
+}
+
+.btn-close-modal:hover {
+  background-color: #008fbf;
+}
+
+/* confirator style ends */
+
+/* Header style starts */
+
+.header-mainWrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 10rem;
+}
+
+/* Header style ends */
