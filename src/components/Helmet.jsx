@@ -1,133 +1,187 @@
 import { useGLTF } from "@react-three/drei";
+import { useEffect, useState } from "react";
+import { useCustomization } from "../context/Customization";
+import { configMesh, customMesh } from "../context/data";
 
-const Helmet = (props) => {
+const Helmet = ({ onMeshClick, sceneRef, ...props }) => {
   const { nodes, materials } = useGLTF("/models/helmet.glb");
+  const { customMeshId } = useCustomization();
+  const [selectedMeshes, setSelectedMeshes] = useState([]);
+
+  // const handlePointerOver = (material) => {
+  //   const mesh = material.object;
+  //   // Store the original color and emissive intensity (only once, if not already stored)
+  //   if (!mesh.userData.originalColor) {
+  //     mesh.userData.originalColor = mesh.material.color.getHex();
+  //   }
+  //   if (!mesh.userData.originalEmissive) {
+  //     mesh.userData.originalEmissive = mesh.material.emissive.getHex();
+  //   }
+  //   if (!mesh.userData.originalEmissiveIntensity) {
+  //     mesh.userData.originalEmissiveIntensity = mesh.material.emissiveIntensity;
+  //   }
+  //   mesh.material.color.set(0x80f3f3);
+  //   mesh.material.emissive.set(0x80f3f3); // Set emissive to the same color
+  //   mesh.material.emissiveIntensity = 2;
+  // };
+
+  // const handlePointerOut = (material) => {
+  //   const mesh = material.object;
+  //   mesh.material.color.setHex(mesh.userData.orginalColor);
+  //   mesh.material.emissive.setHex(mesh.userData.originalEmissiveIntensity); // Set emissive to the same color
+  //   mesh.material.emissiveIntensity = mesh.userData.originalEmissiveIntensity;
+  // };
+
+  const MESHES_DATA = [
+    {
+      id: "Glass",
+      geometry: nodes.Glass.geometry,
+      material: materials.Glass_cover,
+      position: [-0.055, 0.28, -0.433],
+    },
+
+    {
+      id: "SliderOut",
+      geometry: nodes["Slider-out"].geometry,
+      material: materials.cover,
+      position: [-0.055, -0.095, 0.337],
+    },
+
+    {
+      id: "BackShield",
+      geometry: nodes.Back_shield.geometry,
+      material: materials["Back-shield"],
+      position: [-0.055, -0.042, 0.569],
+    },
+    {
+      id: "GlassGuard",
+      geometry: nodes["Glass-guard"].geometry,
+      material: materials["Glass-guard"],
+      position: [-0.055, 0.274, -0.281],
+    },
+
+    {
+      id: "MouthGuard",
+      geometry: nodes["Mouth-guard"].geometry,
+      material: materials["Mouth-guard"],
+      position: [-0.055, -0.027, -0.797],
+    },
+
+    {
+      id: "BackPlate",
+      geometry: nodes["Back-plate"].geometry,
+      material: materials["Back-plate"],
+      position: [-0.055, 0.457, 0.639],
+    },
+
+    {
+      id: "UnderGuard",
+      geometry: nodes.Under_guard.geometry,
+      material: materials["Under-guard"],
+      position: [-0.055, -0.305, -0.169],
+    },
+
+    {
+      id: "InnerCloth",
+      geometry: nodes.Inner_cloth.geometry,
+      material: materials["Inner-cloth"],
+      position: [-0.055, 0.082, 0.011],
+    },
+
+    {
+      id: "Glass001",
+      geometry: nodes.Glass001.geometry,
+      material: materials["Glass_cover.001"],
+      position: [-0.054, 0.288, -0.417],
+    },
+
+    {
+      id: "OuterCover",
+      geometry: nodes.Outer_cover.geometry,
+      material: materials.cover,
+      position: [-0.055, 0.323, 0.065],
+    },
+    {
+      id: "LightMoutLight",
+      geometry: nodes["LightMout-light"].geometry,
+      material: materials["LightMount-cover"],
+      position: [-0.057, 0.207, 0.782],
+    },
+    {
+      id: "LightMoutLightLed",
+      geometry: nodes["LightMout-light-led"].geometry,
+      material: materials["LightMount-light-led"],
+      position: [-0.057, 0.207, 0.782],
+    },
+    {
+      id: "bluetooth",
+      geometry: nodes.bluetooth.geometry,
+      material: materials.Bluetooth,
+      position: [-0.548, -0.161, -0.35],
+      // cameraPosition: [-1, 0, 1],
+    },
+    {
+      id: "bluetooth-01",
+      geometry: nodes["bluetooth-01"].geometry,
+      material: materials["Bluetooth-01"],
+      position: [-0.541, -0.173, -0.369],
+      // cameraPosition: [-1, 0, 1],
+    },
+
+    {
+      id: "TopVent",
+      geometry: nodes["Top-vent"].geometry,
+      material: materials["Top-vent"],
+      position: [-0.055, 0.757, 0.182],
+    },
+    {
+      id: "TopVent-02",
+      geometry: nodes["Top-vent-02"].geometry,
+      material: materials["Top-vent-02"],
+      position: [-0.055, 0.774, -0.047],
+    },
+  ];
+
+  useEffect(() => {
+    const filteredMeshes = [];
+
+    customMeshId?.forEach((item) => {
+      const data = MESHES_DATA.filter((innerItem) => innerItem.id === item);
+      filteredMeshes.push(...data); // Accumulate the results
+    });
+
+    setSelectedMeshes(filteredMeshes); // Set state with all accumulated data
+  }, [customMeshId]);
+
   return (
-    <group {...props} dispose={null}>
-      <mesh
-        geometry={nodes.Glass.geometry}
-        material={materials.Glass_cover}
-        position={[0, 83.356, -47.217]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Glass-pin"].geometry}
-        material={materials.cover}
-        position={[0, 91.14, 4.053]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Slider-out"].geometry}
-        material={materials.cover}
-        position={[0, 39.156, 45.155]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Slider-in"].geometry}
-        material={materials.cover}
-        position={[0, 37.421, 44.393]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes.Back_shield.geometry}
-        material={materials.cover}
-        position={[0, 44.817, 72.636]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Glass-guard"].geometry}
-        material={materials.cover}
-        position={[0, 82.137, -32.198]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes.Ajuster.geometry}
-        material={materials.cover}
-        position={[0, 84.29, -4.494]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Mouth-guard"].geometry}
-        material={materials.cover}
-        position={[0, 47.469, -90.573]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes.Outer_cover.geometry}
-        material={materials.cover}
-        position={[0, 88.533, 12.276]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Top-vent"].geometry}
-        material={materials.cover}
-        position={[0, 140.485, 26.301]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Back-plate"].geometry}
-        material={materials.cover}
-        position={[0, 104.506, 81.057]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes.Under_cloth.geometry}
-        material={materials.cover}
-        position={[0, 14.796, 5.276]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes.Under_guard.geometry}
-        material={materials.cover}
-        position={[0, 13.403, -15.617]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Vent-mesh"].geometry}
-        material={materials.cover}
-        position={[-0.022, 44.072, -91.065]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes.Inner_cloth.geometry}
-        material={materials.cover}
-        position={[0, 63.939, 5.96]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["Mouth-inner-guard"].geometry}
-        material={materials.cover}
-        position={[0, 43.401, -93.245]}
-        rotation={[Math.PI / 2, 0, 0]}
-      />
-      <mesh
-        geometry={nodes["LightMount-cover"].geometry}
-        material={materials["LightMount-cover"]}
-        position={[-0.278, 74.524, 97.456]}
-        rotation={[0, 0, -Math.PI / 2]}
-        scale={[0.234, 0.282, 0.234]}
-      />
-      <mesh
-        geometry={nodes["LightMout-light"].geometry}
-        material={materials["LightMount-light"]}
-        position={[-0.252, 74.583, 98.634]}
-        rotation={[0, 0, -Math.PI / 2]}
-        scale={[0.234, 0.282, 0.234]}
-      />
-      <mesh
-        geometry={nodes.Glass001.geometry}
-        material={materials["Glass_cover.001"]}
-        position={[0.087, 84.274, -44.875]}
-        rotation={[Math.PI / 2, 0, 0]}
-        scale={[0.83, 0.781, 0.693]}
-      />
-      <mesh
-        geometry={nodes.bluetooth.geometry}
-        material={materials.Bluetooth}
-        position={[-58.974, 30.605, -37.36]}
-        rotation={[2.977, 0.343, 0.056]}
-        scale={0.118}
-      />
+    <group {...props} ref={sceneRef} dispose={null} position={[0, -0.2, 0]}>
+      {selectedMeshes?.map((mesh, index) => {
+        return (
+          <mesh
+            key={`${mesh.geometry}-${index}`}
+            geometry={mesh.geometry}
+            material={mesh.material}
+            position={mesh.position}
+            rotation={mesh.rotation}
+            scale={mesh.scale || [1, 1, 1]}
+            onPointerUp={(event) => {
+              if (configMesh.includes(mesh.id)) {
+                onMeshClick(event, mesh);
+              }
+            }}
+            // onPointerOver={(event) => {
+            //   if (configMesh.includes(mesh.id)) {
+            //     handlePointerOver(event);
+            //   }
+            // }}
+            // onPointerLeave={(event) => {
+            //   if (configMesh.includes(mesh.id)) {
+            //     handlePointerOut(event);
+            //   }
+            // }}
+          />
+        );
+      })}
     </group>
   );
 };
