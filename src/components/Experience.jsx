@@ -1,19 +1,26 @@
-import { PresentationControls, Stage } from "@react-three/drei";
+import { Environment, PresentationControls, Stage } from "@react-three/drei";
 import Helmet from "./Helmet";
-import { useRef, useState } from "react";
+import { Suspense, useRef, useState } from "react";
 import CameraControls from "../utils/CameraControls";
 import { Canvas } from "@react-three/fiber";
 import Configurator from "./Configurator";
 import * as THREE from "three";
 import Header from "./Header";
 import { useCustomization } from "../context/Customization";
+import CustomBackgroundShader from "./Shader";
+import { colorPallete } from "../context/data";
+import MouseCircleText from "./MouseCircleText";
+import Loader from "./Loader";
 
 const Experience = () => {
   const sceneRef = useRef();
-  const { selectedMeshes } = useCustomization();
+  const { selectedMeshes, setCoverColor } = useCustomization();
+
+  const [showTooltip, setShowTooltip] = useState(false);
 
   const [clickedMesh, setClickedMesh] = useState(null);
   const [openConfigurator, setOpenConfigurator] = useState(false);
+  const [openColorPallete, setOpenColorPallete] = useState(false);
 
   // to disable the controls after focusing mesh
   const [disableControl, setDisableControl] = useState(true);
@@ -61,9 +68,6 @@ const Experience = () => {
   return (
     <>
       <div className="app-MainWrapper">
-        {/* <div className="app-headerContainer">
-          <Header />
-        </div> */}
         <Canvas
           drp={[1, 2]}
           camera={{ position: [0, 0, 3], fov: 35 }}
@@ -74,8 +78,8 @@ const Experience = () => {
             sceneRef={sceneRef}
             manualCameraPosition={selectedMeshCamera}
           />
+          <CustomBackgroundShader />
 
-          <color attach="background" args={["#213547"]} />
           <PresentationControls
             enabled={disableControl}
             speed={1.5}
@@ -83,11 +87,46 @@ const Experience = () => {
             polar={[-Math.PI / 4, Math.PI / 4]} // Allow half rotation on the vertical axis (both positive and negative)
             rotation={[0, Math.PI / 2, 0]} // Initial rotation
           >
-            <Stage environment="city" intensity={0.6} castShadow={false}>
-              <Helmet onMeshClick={onMeshClickFunction} sceneRef={sceneRef} />
-            </Stage>
+            <Suspense fallback={<Loader />}>
+              <Stage environment="city" intensity={0.6} castShadow={false}>
+                <Helmet
+                  onMeshClick={onMeshClickFunction}
+                  sceneRef={sceneRef}
+                  onShowToolTipFunc={(event) => setShowTooltip(event)}
+                />
+              </Stage>
+            </Suspense>
           </PresentationControls>
         </Canvas>
+        {showTooltip && <MouseCircleText />}
+        {/* <div className="app-headerContainer">
+          <Header />
+        </div> */}
+        <div className="color-selector-btn">
+          {!openColorPallete && (
+            <button onClick={() => setOpenColorPallete(true)}>Theme</button>
+          )}
+        </div>
+        {openColorPallete && (
+          <div
+            className={`color-content ${
+              openColorPallete ? "move-up" : "move-down"
+            }`}
+          >
+            <>
+              {colorPallete.map((item) => (
+                <div
+                  key={item.name}
+                  className="color-selector"
+                  style={{ backgroundColor: `${item.color}` }}
+                  onClick={() => setCoverColor(item.color)}
+                />
+              ))}
+            </>
+
+            <button onClick={() => setOpenColorPallete(false)}>X</button>
+          </div>
+        )}
         {openConfigurator && (
           <Configurator
             handleCancel={() => onMeshClickFunction(null)}

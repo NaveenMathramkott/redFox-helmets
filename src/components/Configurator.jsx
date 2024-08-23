@@ -4,14 +4,20 @@ import { configOptions } from "../context/data";
 
 const Configurator = ({ handleCancel, selectedMesh }) => {
   const [showModal, setShowModal] = useState(false);
-  const { customMeshId, setCustomMeshId } = useCustomization();
+  const { customMeshId, setCustomMeshId, setCustomSelect, customSelect } =
+    useCustomization();
   const [options, setOptions] = useState({});
-  const [opt, setOpt] = useState("");
+  const [opt, setOpt] = useState("choose your items");
 
   useEffect(() => {
     configOptions.forEach((item) => {
       item.data.forEach((innerItem) => {
         if (innerItem.meshName.includes(selectedMesh.id)) {
+          customSelect.map((data) => {
+            if (data.type === item.type) {
+              setOpt(data.selected);
+            }
+          });
           setOptions(item);
           return;
         }
@@ -19,10 +25,27 @@ const Configurator = ({ handleCancel, selectedMesh }) => {
     });
   }, [selectedMesh]);
 
-  const handleChange = (event) => {
-    const newId = event.target.value;
+  const handleChange = (newId, itemName) => {
     const newBaseId = newId.split("-")[0];
-    setOpt(newId);
+    setOpt(itemName);
+    setCustomSelect((prevCustomSelect) => {
+      const existingIndex = prevCustomSelect.findIndex(
+        (item) => item.type === options.type
+      );
+
+      if (existingIndex !== -1) {
+        // If the type already exists, update the selected value
+        const updatedSelect = [...prevCustomSelect];
+        updatedSelect[existingIndex].selected = itemName;
+        return updatedSelect;
+      } else {
+        // If the type doesn't exist, add the new type and selected value
+        return [
+          ...prevCustomSelect,
+          { type: options.type, selected: itemName },
+        ];
+      }
+    });
     const updatedIds = customMeshId.map((id) => {
       const baseId = id.split("-")[0];
       if (baseId === newBaseId) {
@@ -33,81 +56,58 @@ const Configurator = ({ handleCancel, selectedMesh }) => {
     });
     setCustomMeshId(updatedIds);
   };
-
-  useEffect(() => {
-    customMeshId?.forEach((item) => {
-      options?.data?.forEach((innerItem) => {
-        if (item === innerItem.meshName) {
-          console.log("customMeshId", item === innerItem.meshName);
-          setOpt(innerItem.name);
-        }
-      });
-    });
-  }, [customMeshId]);
-
   return (
     <div>
       <div className="configurator">
-        <h1 className="title">Choose item</h1>
+        <h1 className="title">Choose {options.type}</h1>
         <div className="config-section">
           <label htmlFor="product-dropdown" className="label">
             Choose Product
           </label>
-          <select
+          <button
             id="product-dropdown"
             className="dropdown"
-            onChange={handleChange}
-            defaultValue={opt}
+            onClick={() => setShowModal(!showModal)}
           >
-            {options?.data?.map((item, index) => (
-              <option
-                key={`${index}-01`}
-                value={item.meshName}
-                // selected={item.name === opt}
-              >
-                {item.name}
-              </option>
-            ))}
-          </select>
-        </div>
-        {/* <div className="config-section">
-          <label className="label">Select Color</label>
-          <div className="color-selection">
-            <div className="color-option color-red" />
-            <div className="color-option color-blue" />
-            <div className="color-option color-green" />
-          </div>
-        </div> */}
-        <div className="config-section btn-section">
-          <button className="btn-configure" onClick={() => setShowModal(true)}>
-            Configure
+            {opt}
           </button>
-          <button className="btn-reset" onClick={handleCancel}>
-            Reset
+          {showModal && (
+            <div className="modal" id="modal">
+              <div className="modal-content">
+                {options?.data?.map((item, index) => (
+                  <ul
+                    key={`${index}-01`}
+                    value={item.meshName}
+                    onClick={() => handleChange(item.meshName, item.name)}
+                  >
+                    {item.name}
+                  </ul>
+                ))}
+              </div>
+              <button
+                className="btn-close-modal"
+                onClick={() => {
+                  setShowModal(false);
+                }}
+              >
+                Close
+              </button>
+            </div>
+          )}
+        </div>
+
+        <div className="config-section btn-section">
+          {/* <button
+            className="btn-cancel"
+            // onClick={handleCancel}
+          >
+            Cancel
+          </button> */}
+          <button className="btn-save" onClick={handleCancel}>
+            Save
           </button>
         </div>
       </div>
-      {/* Modal Popup */}
-      {showModal ? (
-        <div className="modal" id="modal">
-          <div className="modal-content">
-            <span className="close-button" id="close-button">
-              ×
-            </span>
-            <h2>Configuration Saved</h2>
-            <p>Your product configuration has been saved successfully!</p>
-            <button
-              className="btn-close-modal"
-              onClick={() => {
-                setShowModal(false);
-                handleCancel();
-              }}
-            >
-              Close
-            </button>
-          </div>
-        </div>
-      ) : null}
     </div>
   );
 };

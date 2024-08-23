@@ -11,6 +11,7 @@ export const CustomizationProvider = (props) => {
   const [innerMeshColor, setInnerMeshColor] = useState(colorPallete[0]);
   const [customSelect, setCustomSelect] = useState([]);
   const [customMeshId, setCustomMeshId] = useState(customMesh);
+  const [coverColor, setCoverColor] = useState(colorPallete[0].color);
 
   useEffect(() => {
     setCustomMeshId(customMesh);
@@ -26,6 +27,7 @@ export const CustomizationProvider = (props) => {
         innerMeshColor,
         customSelect,
         customMeshId,
+        coverColor,
         setBackLed,
         setBlutoothModule,
         setCushionMaterial,
@@ -33,6 +35,7 @@ export const CustomizationProvider = (props) => {
         setInnerVisor,
         setCustomSelect,
         setCustomMeshId,
+        setCoverColor,
       }}
     >
       {props.children}

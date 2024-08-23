@@ -1,5 +1,13 @@
 const colorPallete = [
   {
+    color: "#59555b",
+    name: "grey",
+  },
+  {
+    color: "#ececec",
+    name: "white",
+  },
+  {
     color: "#222222",
     name: "black",
   },
@@ -23,17 +31,9 @@ const colorPallete = [
     color: "#ffa500",
     name: "orange",
   },
-  {
-    color: "#59555b",
-    name: "grey",
-  },
-
-  {
-    color: "#ececec",
-    name: "white",
-  },
 ];
 
+// includes mesh name then only shown in the current screen
 const customMesh = [
   "Glass",
   "SliderOut",
@@ -49,11 +49,21 @@ const customMesh = [
   "LightMoutLightLed",
   "bluetooth",
   "TopVent",
+  "Holder",
 ];
 
 //ids of meshes need able to config in helmet component
-const configMesh = ["bluetooth", "TopVent", "bluetooth-01", "TopVent-02"];
+const configMesh = [
+  "bluetooth",
+  "TopVent",
+  "bluetooth-01",
+  "TopVent-02",
+  "Holder",
+  // "BackPlate",
+  // "BackShield",
+];
 
+// includes options in the options pop up
 const configOptions = [
   {
     type: "bluetooth",
@@ -70,6 +80,13 @@ const configOptions = [
       { name: "Vent-1", meshName: "TopVent" },
       { name: "Vent-2", meshName: "TopVent-02" },
       { name: "none", meshName: "TopVent-none" },
+    ],
+  },
+  {
+    type: "Holder",
+    data: [
+      { name: "Cam Holder", meshName: "Holder" },
+      { name: "none", meshName: "Holder-none" },
     ],
   },
 ];
