@@ -165,7 +165,7 @@ const Helmet = ({ onMeshClick, sceneRef, onShowToolTipFunc, ...props }) => {
       id: "Holder",
       geometry: nodes.holder.geometry,
       material: materials.holder,
-      position: [0.001, -0.271, -0.779],
+      position: [0.001, -0.265, -0.755],
     },
     {
       id: "Holder-none",

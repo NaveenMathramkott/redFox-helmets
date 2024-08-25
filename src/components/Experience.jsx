@@ -1,16 +1,21 @@
-import { Environment, PresentationControls, Stage } from "@react-three/drei";
+import {
+  PresentationControls,
+  RandomizedLight,
+  Stage,
+} from "@react-three/drei";
 import Helmet from "./Helmet";
 import { Suspense, useRef, useState } from "react";
 import CameraControls from "../utils/CameraControls";
 import { Canvas } from "@react-three/fiber";
 import Configurator from "./Configurator";
 import * as THREE from "three";
-import Header from "./Header";
 import { useCustomization } from "../context/Customization";
 import CustomBackgroundShader from "./Shader";
 import { colorPallete } from "../context/data";
 import MouseCircleText from "./MouseCircleText";
 import Loader from "./Loader";
+import HeaderTab from "./Header";
+import { Toaster } from "react-hot-toast";
 
 const Experience = () => {
   const sceneRef = useRef();
@@ -89,6 +94,13 @@ const Experience = () => {
           >
             <Suspense fallback={<Loader />}>
               <Stage environment="city" intensity={0.6} castShadow={false}>
+                <RandomizedLight
+                  castShadow
+                  amount={1}
+                  frames={10}
+                  position={[5, 5, -1]}
+                  ambient={10}
+                />
                 <Helmet
                   onMeshClick={onMeshClickFunction}
                   sceneRef={sceneRef}
@@ -99,9 +111,9 @@ const Experience = () => {
           </PresentationControls>
         </Canvas>
         {showTooltip && <MouseCircleText />}
-        {/* <div className="app-headerContainer">
-          <Header />
-        </div> */}
+        <div className="app-headerContainer">
+          <HeaderTab />
+        </div>
         <div className="color-selector-btn">
           {!openColorPallete && (
             <button onClick={() => setOpenColorPallete(true)}>Theme</button>
@@ -127,12 +139,16 @@ const Experience = () => {
             <button onClick={() => setOpenColorPallete(false)}>X</button>
           </div>
         )}
+        <div className="bottom-footer">
+          Click on Helmet to configure - Created with love by Amouxtek
+        </div>
         {openConfigurator && (
           <Configurator
             handleCancel={() => onMeshClickFunction(null)}
             selectedMesh={selectedCustomMesh}
           />
         )}
+        <Toaster />
       </div>
     </>
   );

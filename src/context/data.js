@@ -68,8 +68,8 @@ const configOptions = [
   {
     type: "bluetooth",
     data: [
-      { name: "Intercom", meshName: "bluetooth" },
-      { name: "bluetooth", meshName: "bluetooth-01" },
+      { name: "Intercom", meshName: "bluetooth", price: 3500 },
+      { name: "Bluetooth", meshName: "bluetooth-01", price: 1700 },
       { name: "none", meshName: "bluetooth-none" },
     ],
   },
@@ -85,7 +85,7 @@ const configOptions = [
   {
     type: "Holder",
     data: [
-      { name: "Cam Holder", meshName: "Holder" },
+      { name: "Cam Holder", meshName: "Holder", price: 600 },
       { name: "none", meshName: "Holder-none" },
     ],
   },
