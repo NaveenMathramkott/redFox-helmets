@@ -3,6 +3,7 @@ import AppLoading from "./components/AppLoading";
 import Experience from "./components/Experience";
 import { CustomizationProvider } from "./context/Customization";
 import { useProgress } from "@react-three/drei";
+import { CartProvider } from "./context/Cart";
 
 const App = () => {
   const { progress } = useProgress();
@@ -20,7 +21,7 @@ const App = () => {
   }, [progress]);
   return (
     <CustomizationProvider>
-      {appOnLive ? <Experience /> : <AppLoading />}
+      <CartProvider>{appOnLive ? <Experience /> : <AppLoading />}</CartProvider>
     </CustomizationProvider>
   );
 };

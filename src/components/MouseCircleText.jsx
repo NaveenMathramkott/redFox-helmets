@@ -41,8 +41,6 @@ const MouseCircleText = () => {
           fontSize="12"
           fontWeight="bold"
           fill="#fff"
-          onMouseDown="return false;"
-          //   onSelectStart="return false;"
         >
           <textPath
             href="#circlePath"

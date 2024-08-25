@@ -1,11 +1,13 @@
 import { useEffect, useState } from "react";
 import { useCustomization } from "../context/Customization";
 import { configOptions } from "../context/data";
+import { useCart } from "../context/Cart";
 
 const Configurator = ({ handleCancel, selectedMesh }) => {
   const [showModal, setShowModal] = useState(false);
   const { customMeshId, setCustomMeshId, setCustomSelect, customSelect } =
     useCustomization();
+  const { setCustomProducts, customProducts } = useCart();
   const [options, setOptions] = useState({});
   const [opt, setOpt] = useState("choose your items");
 
@@ -25,7 +27,7 @@ const Configurator = ({ handleCancel, selectedMesh }) => {
     });
   }, [selectedMesh]);
 
-  const handleChange = (newId, itemName) => {
+  const handleChange = (newId, itemName, price) => {
     const newBaseId = newId.split("-")[0];
     setOpt(itemName);
     setCustomSelect((prevCustomSelect) => {
@@ -46,6 +48,32 @@ const Configurator = ({ handleCancel, selectedMesh }) => {
         ];
       }
     });
+    setCustomProducts((prevCustomProducts) => {
+      const existingIndex = prevCustomProducts.findIndex(
+        (item) => item.type === options.type
+      );
+
+      if (existingIndex !== -1) {
+        // If the type already exists, update the selected value
+        const updatedProducts = [...prevCustomProducts];
+        updatedProducts[existingIndex] = {
+          ...updatedProducts[existingIndex],
+          name: itemName,
+          price: price,
+          type: options.type,
+        };
+        // setCustomProducts(updatedProducts);
+        return updatedProducts;
+      } else {
+        const newProduct = {
+          name: itemName,
+          price: price,
+          type: options.type,
+        };
+        return [...prevCustomProducts, newProduct];
+      }
+    });
+
     const updatedIds = customMeshId.map((id) => {
       const baseId = id.split("-")[0];
       if (baseId === newBaseId) {
@@ -57,7 +85,7 @@ const Configurator = ({ handleCancel, selectedMesh }) => {
     setCustomMeshId(updatedIds);
   };
   return (
-    <div>
+    <div className="configurator-mainWrapper">
       <div className="configurator">
         <h1 className="title">Choose {options.type}</h1>
         <div className="config-section">
@@ -78,7 +106,9 @@ const Configurator = ({ handleCancel, selectedMesh }) => {
                   <ul
                     key={`${index}-01`}
                     value={item.meshName}
-                    onClick={() => handleChange(item.meshName, item.name)}
+                    onClick={() =>
+                      handleChange(item.meshName, item.name, item.price)
+                    }
                   >
                     {item.name}
                   </ul>
